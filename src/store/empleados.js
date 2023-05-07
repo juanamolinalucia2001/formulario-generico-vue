@@ -1,31 +1,47 @@
-import Vue from "vue";
-import Vuex from "vuex";
-import service from "../servicio/empleados";
+import Vue from 'vue';
+import Vuex from 'vuex';
+
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    empleados: [],
-    service: new service(),
+    empleados: []
   },
   mutations: {
-    setEmpleados(state, payload) {
-      state.empleados = payload;
+    agregarEmpleado(state, empleado) {
+      state.empleados.push(empleado);
     },
+    editarEmpleado(state, { index, empleado }) {
+      if (index !== -1) {
+        state.empleados.splice(index, 1, empleado);
+      }
+    },
+    eliminarEmpleado(state, empleado) {
+      // Buscar el empleado en la lista y eliminarlo
+      const index = state.empleados.findIndex(e => e.DNI === empleado.DNI);
+      if (index !== -1) {
+        state.empleados.splice(index, 1);
+      }
+    }
   },
   actions: {
-    async getEmpleados(state) {
-      return new Promise(async (resolve, reject) => {
-        try {
-          let item = await state.state.service.getEmpleados();
-
-          state.commit("setEmpleados", item);
-          resolve(true);
-        } catch (error) {
-          reject(error);
-        }
-      });
+    guardarEmpleado({ commit }, empleado) {
+      commit('agregarEmpleado', empleado);
     },
+    editarEmpleado({ commit, state }, { empleado }) {
+      const index = state.empleados.findIndex(e => e.DNI === empleado.DNI);
+      if (index !== -1) {
+        commit('editarEmpleado', { index, empleado });
+      }
+    },
+
+    eliminarEmpleado({ commit }, empleado) {
+      commit('eliminarEmpleado', empleado);
+    }
   },
-  modules: {},
+  getters: {
+    obtenerEmpleados(state) {
+      return state.empleados;
+    }
+  }
 });

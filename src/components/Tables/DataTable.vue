@@ -1,92 +1,46 @@
 <template>
-  <div>
-  
-    <table class="tabla-empleados">
-      <thead>
-        <tr>
-          <th>Nombre</th>
-          <th>Legajo</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="empleado in empleados" :key="empleado.id">
-          <td>{{ empleado.Nombre }}</td>
-          <td>{{ empleado.Legajo }}</td>
-          <td>
-            <button @click="editarEmpleado(empleado)">Editar</button>
-            <button @click="eliminarEmpleado(empleado)">Eliminar</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+  <v-data-table class="mt-5" :headers="encabezados" :items="datos" :items-per-page="5">
+    <template v-slot:item="{ item }">
+      <tr>
+        <td v-for="columna in columnas" :key="columna.value">
+          {{ item[columna.value] }}
+        </td>
+        <td>
+          <v-btn  color="primary" @click="editar(item)">editar</v-btn>
+        </td>
+        <td>
+          <v-btn  color="red" @click="eliminar(item)"> delete</v-btn>
+        </td>
+      </tr>
+    </template>
+  </v-data-table>
 </template>
 
 <script>
-import empleados from '../../store/empleados'
 export default {
-  data() {
-    return {
-      nuevoEmpleado: {},
-      modoEditar:null
+  name: 'DataTableGeneric',
+  props: {
+    encabezados: {
+      type: Array,
+      required: true
+    },
+    datos: {
+      type: Array,
+      required: true
     }
   },
-  mounted() {
-    empleados.dispatch('getEmpleados')
-  },
   computed: {
-    empleados() {
-      return empleados.state.empleados
+    columnas() {
+      return this.encabezados;
     }
   },
   methods: {
-    editarEmpleado(empleado) {
-      this.nuevoEmpleado = Object.assign({}, empleado);
-      this.modoEditar = true;
+    editar(item) {
+      this.$emit('editar', item);
+    },
+    eliminar(item) {
+      this.$emit('eliminar', item);
     }
   }
 };
 </script>
-
-<style scoped>
-/* ... código del CSS ... */
-
-.tabla-empleados {
-  border-collapse: collapse;
-  margin-top: 20px;
-  width: 100%;
-}
-
-.tabla-empleados th,
-.tabla-empleados td {
-  border: 1px solid #ccc;
-  padding: 10px;
-  text-align: left;
-}
-
-.tabla-empleados th {
-  background-color: #f2f2f2;
-  font-weight: bold;
-}
-
-.tabla-empleados tr:hover {
-  background-color: #f2f2f2;
-}
-
-.tabla-empleados td button {
-  background-color: transparent;
-  border: none;
-  color: #1a73e8;
-  cursor: pointer;
-  font-size: 1rem;
-  margin-right: 10px;
-  padding: 0;
-  text-decoration: underline;
-}
-
-.tabla-empleados td button:hover {
-  text-decoration: none;
-}
-</style>
-  
