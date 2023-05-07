@@ -1,7 +1,7 @@
 # mvc-proyect-vue2
   En resumen, el proyecto tiene como objetivo principal crear un formulario genérico y reutilizable que pueda adaptarse a diferentes contextos y         necesidades al definir los campos y las reglas de validación de manera dinámica.
 # como?
-Entendido. En ese caso, la idea general del proyecto es crear un formulario genérico que pueda ser reutilizado en diferentes contextos y para diferentes tipos de datos.
+La idea general del proyecto es crear un formulario genérico que pueda ser reutilizado en diferentes contextos y para diferentes tipos de datos.
 
 El componente principal es FormularioGenerico, que se encarga de renderizar un formulario con campos generados dinámicamente a partir de un objeto campos que se pasa como propiedad. Cada campo del formulario está representado por un elemento <v-text-field> de Vuetify.
 
